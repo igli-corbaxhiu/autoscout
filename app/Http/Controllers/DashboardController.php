@@ -14,7 +14,8 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        return view('welcome');
+        $cars = Car::where('status', 1)->get();
+        return view('welcome', compact('cars'));
     }
 
     public function adminDashboard()
@@ -24,6 +25,14 @@ class DashboardController extends Controller
         $subcategories = Subcategory::all();
         
         return view('adminDashboard', compact('cars', 'categories', 'subcategories'));
+    }
+
+    public function dashboard(Request $request)
+    {
+        // get cars from session after logged in
+        $cartItems = $request->session()->get('cart', []);
+
+        return view('dashboard', compact('cartItems'));
     }
 
     /**

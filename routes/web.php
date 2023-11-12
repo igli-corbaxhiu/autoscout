@@ -20,9 +20,7 @@ use App\Http\Controllers\DashboardController;
 Route::get('/', [DashboardController::class, 'index'])->name('welcome');
 
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -33,8 +31,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin-dashboard', [DashboardController::class, 'adminDashboard'])->name('admin.dashboard')->middleware('admin');
     Route::delete('/car/{car}', [CarController::class, 'destroy'])->name('car.destroy')->middleware('admin');
     Route::post('/car/store', [CarController::class, 'store'])->name('car.store')->middleware('admin');
-
+    Route::post('/car/get', [CarController::class, 'index'])->name('car.get')->middleware('admin');
+    Route::put('/car/update', [CarController::class, 'update'])->name('car.update')->middleware('admin');
 
 });
+
+// routes for car-related actions
+Route::post('/cart/add/{carId}', [CarController::class, 'addToCart'])->name('cart.add');
+Route::post('/cart/remove/{carId}', [CarController::class, 'removeFromCart'])->name('cart.remove');
+Route::get('/cart/show', [CarController::class, 'showCart'])->name('cart.show');
+Route::get('/checkout', [CarController::class, 'checkout'])->name('checkout');
+
 
 require __DIR__.'/auth.php';
