@@ -19,9 +19,6 @@ use App\Http\Controllers\DashboardController;
 
 Route::get('/', [DashboardController::class, 'index'])->name('welcome');
 
-
-Route::get('/dashboard', [DashboardController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
-
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -40,7 +37,8 @@ Route::middleware('auth')->group(function () {
 Route::post('/cart/add/{carId}', [CarController::class, 'addToCart'])->name('cart.add');
 Route::post('/cart/remove/{carId}', [CarController::class, 'removeFromCart'])->name('cart.remove');
 Route::get('/cart/show', [CarController::class, 'showCart'])->name('cart.show');
-Route::get('/checkout', [CarController::class, 'checkout'])->name('checkout');
+Route::get('/checkout/items', [CarController::class, 'checkoutItems'])->name('checkout.show');
+Route::post('/checkout', [CarController::class, 'checkout'])->name('checkout');
 
 
 require __DIR__.'/auth.php';

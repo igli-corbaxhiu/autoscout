@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Car;
+use App\Models\Cart;
 use App\Models\Subcategory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CarController extends Controller
 {
@@ -54,16 +56,39 @@ class CarController extends Controller
     {
         // Check if the user is logged in
         if (auth()->check()) {
-            // Logic to associate cart items with the user account
+            
+            //create the checkout record
+            $checkout = new Cart;
+            $checkout->user_id = Auth::user()->id;
+            $checkout->cars = json_encode($request->session()->get('cart'));
+            $cars = Car::whereIn('id', $request->session()->get('cart'))->get();
+
+            foreach($cars as $car)
+            {
+                $car->status = 0; //change status of checked out cars so they can not be visible again
+                $car->save();
+            }
+
+            $checkout->save();
 
             // Clear the session or temporary storage
             $request->session()->forget('cart');
 
-            return redirect()->route('checkout')->with('success', 'Proceed to checkout.');
+            return redirect()->route('cart.show')->with('success', 'Proceed to checkout.');
         } else {
-            // Redirect the user to the login or registration page
+            // Redirect the user to the login
             return redirect()->route('login')->with('info', 'Please log in to complete your purchase.');
         }
+    }
+
+    public function checkoutItems(Request $request)
+    {
+        $checkedout = Cart::where('user_id', Auth::user()->id)->first();
+
+        $cars = Car::whereIn('id', json_decode($checkedout->cars))->get();
+
+        return view('checkedout', compact('cars'));
+
     }
 
     public function removeFromCart(Request $request, $carIdRemove)

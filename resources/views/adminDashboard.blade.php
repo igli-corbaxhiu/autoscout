@@ -210,8 +210,8 @@
                         <div class="form-group mt-2">
                             <label for="status">Activity</label>
                             <select class="form-control" id="status" name="status">
-                                <option value="1" {{ $car->status == 1 ? 'selected' : '' }}>Active</option>
-                                <option value="0" {{ $car->status == 0 ? 'selected' : '' }}>Not Active</option>
+                                <option value="1">Active</option>
+                                <option value="0">Not Active</option>
                             </select>
                         </div>
 
@@ -257,7 +257,7 @@
                     data: form.serialize(),
                     success: function(data) {
                         Swal.fire({
-                            title: "Added successfully",
+                            title: "Success",
                             icon: 'success',
                             showCancelButton: false, // Hide the cancel button
                             confirmButtonColor: '#3085d6',
@@ -299,13 +299,13 @@
                         id: id
                     },
                     dataType: 'json',
-                    success: function(res) { console.log(res);
+                    success: function(res) {
                         $('#brand_edit').val(res.brand);
                         $('#model_edit').val(res.model);
                         $('#registrationDate_edit').val(res.registrationDate);
                         $('#engineSize_edit').val(res.engineSize);
                         $('#price_edit').val(res.price);
-                
+                        $('#status option[value="' + res.status + '"]').attr('selected', 'selected');
                         $('#carModalEdit').modal('show');
                     },
                     error: function(error) {

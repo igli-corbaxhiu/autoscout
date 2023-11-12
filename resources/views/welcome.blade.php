@@ -77,7 +77,7 @@
                 <div class="flex">
                     <!-- Logo -->
                     <div class="shrink-0 flex items-center">
-                        <a href="{{ route('dashboard') }}">
+                        <a href="{{ url('/') }}">
                             <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
                         </a>
                     </div>
@@ -102,8 +102,16 @@
                             <x-dropdown-link :href="url('/')">
                                 {{ __('Dashboard') }}
                             </x-dropdown-link>
+                            @if(Auth::user()->role == 'admin')
+                            <x-dropdown-link :href="url('/admin-dashboard')">
+                                {{ __('Admin Dashboard') }}
+                            </x-dropdown-link>
+                            @endif
                             <x-dropdown-link :href="url('/cart/show')">
                                 {{ __('Cart') }}
+                            </x-dropdown-link>
+                            <x-dropdown-link :href="url('/checkout/items')">
+                                {{ __('Checked out items') }}
                             </x-dropdown-link>
                             <x-dropdown-link :href="route('profile.edit')">
                                 {{ __('Profile') }}
@@ -140,7 +148,7 @@
                 </div>
             </div>
         </div>
-        <div class="relative sm:flex sm:justify-center sm:items-center min-h-screen bg-dots-darker bg-center bg-gray-100 dark:bg-dots-lighter dark:bg-gray-900 selection:bg-red-500 selection:text-white">
+        <div class="relative sm:flex sm:justify-center sm:items-center bg-dots-darker bg-center bg-gray-100 dark:bg-dots-lighter dark:bg-white selection:bg-red-500 selection:text-white">
             <div class="row" style="margin-top: 5rem;">
                 @foreach ($cars as $car)
                     <div class="col-sm-3 d-flex justify-center">

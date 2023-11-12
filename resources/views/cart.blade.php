@@ -1,5 +1,6 @@
 @extends('layouts.app')
 @section('content')
+<div style="font-size: 1.3rem" class="p-2 ml-4 d-flex justify-center bg-slate-400 text-white font-extrabold w-56 mx-auto rounded-md">Cart</div>
 <div class="row" style="margin-top: 5rem;">
     @if($cars != null)
     @foreach ($cars as $car)
@@ -21,6 +22,12 @@
         </div>
     </div>
     @endforeach
+    <div class="d-flex justify-center">
+        <form action="{{ route('checkout') }}" method="post">
+            @csrf
+            <button style="background-color: #4b72ff;" class="buy-button" type="submit">Checkout</button>
+        </form>
+    </div>
     @else
     <div>No cars in the cart!</div>
     @endif

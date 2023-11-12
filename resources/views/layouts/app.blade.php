@@ -79,7 +79,7 @@
                 <div class="flex">
                     <!-- Logo -->
                     <div class="shrink-0 flex items-center">
-                        <a href="{{ route('dashboard') }}">
+                        <a href="{{ url('/') }}">
                             <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
                         </a>
                     </div>
@@ -104,8 +104,16 @@
                             <x-dropdown-link :href="url('/')">
                                 {{ __('Dashboard') }}
                             </x-dropdown-link>
+                            @if(Auth::user()->role == 'admin')
+                            <x-dropdown-link :href="url('/admin-dashboard')">
+                                {{ __('Admin Dashboard') }}
+                            </x-dropdown-link>
+                            @endif
                             <x-dropdown-link :href="url('/cart/show')">
                                 {{ __('Cart') }}
+                            </x-dropdown-link>
+                            <x-dropdown-link :href="url('/checkout/items')">
+                                {{ __('Checked out items') }}
                             </x-dropdown-link>
                             <x-dropdown-link :href="route('profile.edit')">
                                 {{ __('Profile') }}
