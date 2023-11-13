@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-<div style="font-size: 1.3rem" class="p-2 ml-4 d-flex justify-center bg-slate-400 text-white font-extrabold w-56 mx-auto rounded-md">Cart</div>
+<div style="font-size: 1.3rem" class="mt-3 p-2 ml-4 d-flex justify-center bg-slate-400 text-white font-extrabold w-56 mx-auto rounded-md">Cart</div>
 <div class="row" style="margin-top: 5rem;">
     @if($cars != null)
     @foreach ($cars as $car)
@@ -13,9 +13,17 @@
                 <p class="car-details">{{ $car->registrationDate }}</p>
                 <p class="car-details">{{ $car->engineSize }}</p>
                 <p class="car-price">${{ $car->price }}</p>
+                <?php
+                    $tags = json_decode($car->tags);
+                ?>
+                <div>
+                    @foreach ($tags as $data)
+                        <div class="btn bg-fuchsia-300 mt-1" style="font-size: 0.7rem;">{{ $data->subcategory}}</div>
+                    @endforeach
+                </div>
                 <form action="{{ route('cart.remove', $car->id) }}" method="post" class="addCart">
                     @csrf
-                    <button style="background-color: #fa8383;" class="buy-button" type="submit">Remove from cart</button>
+                    <button style="background-color: #fa8383;" class="buy-button mt-2" type="submit">Remove from cart</button>
                 </form>
               
             </div>
@@ -29,7 +37,11 @@
         </form>
     </div>
     @else
-    <div>No cars in the cart!</div>
+    <div style="padding: 2rem;
+    justify-content: center;
+    display: flex;
+    font-weight: bold;
+    font-size: 1.4rem;">No cars in the cart!</div>
     @endif
 </div>
 @endsection

@@ -24,7 +24,7 @@ class RedirectIfAuthenticated
                 if (Auth::user()->role == 'admin') {
                     return redirect('/admin-dashboard');
                 } elseif (Auth::user()->role == 'user') {
-                    return redirect('/dashboard');
+                    return redirect('/');
                 }
             }
         }

@@ -67,13 +67,34 @@
             .buy-button:hover {
                 background-color: #218838;
             }
+
+            .container {
+            position: relative;
+            height: 300px; /* Set an appropriate height */
+            color: white; /* Text color */
+        }
+
+        .background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://www.kia.com/content/dam/kwcms/au/en/images/category/performance/media-banner-960x540.webp') no-repeat center center / cover;
+        }
+
+        .content {
+            position: relative;
+            z-index: 1; /* Bring the text content above the background */
+            padding: 20px; /* Adjust padding as needed */
+        }
         </style>
 
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="antialiased">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
+        <div class="">
+            <div class="px-4 flex justify-between h-16" style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);"s>
                 <div class="flex">
                     <!-- Logo -->
                     <div class="shrink-0 flex items-center">
@@ -148,11 +169,13 @@
                 </div>
             </div>
         </div>
-        <div class="relative sm:flex sm:justify-center sm:items-center bg-dots-darker bg-center bg-gray-100 dark:bg-dots-lighter dark:bg-white selection:bg-red-500 selection:text-white">
-            <div class="row" style="margin-top: 5rem;">
+        <div class="relative sm:justify-center container sm:items-center bg-dots-darker bg-center bg-gray-100 dark:bg-dots-lighter dark:bg-white selection:bg-red-500 selection:text-white">
+            <div class="background"></div>
+
+            <div class="row row-cols-md-4 p-4 content" style="">
                 @foreach ($cars as $car)
-                    <div class="col-sm-3 d-flex justify-center">
-                        <div class="car-card">
+                    <div class="col d-flex justify-center">
+                        <div class="car-card bg-white">
                             <img src="{{ asset('car.png') }}" alt="Car Image" class="car-image mx-auto">
                             <div class="card-body">
                                 <h5 class="car-title">{{ $car->brand }}</h5>
@@ -160,12 +183,20 @@
                                 <p class="car-details">{{ $car->registrationDate }}</p>
                                 <p class="car-details">{{ $car->engineSize }}</p>
                                 <p class="car-price">${{ $car->price }}</p>
+                                <?php
+                                    $tags = json_decode($car->tags);
+                                ?>
+                                <div>
+                                    @foreach ($tags as $data)
+                                        <div class="btn bg-fuchsia-300 mt-1" style="font-size: 0.7rem;">{{ $data->subcategory}}</div>
+                                    @endforeach
+                                </div>
                                 @if(in_array($car->id, session('cart', [])))
-                                    <button style="background-color: #eef275;" class="btn" disabled>Added to cart</button>
+                                    <button style="background-color: #eef275;" class="btn mt-2" disabled>Added to cart</button>
                                 @else
                                     <form action="{{ route('cart.add', $car->id) }}" method="post" class="addCart">
                                         @csrf
-                                        <button style="background-color: #218838;" class="buy-button" type="submit">Add to Cart</button>
+                                        <button style="background-color: #218838;" class="buy-button mt-2" type="submit">Add to Cart</button>
                                     </form>
                                 @endif
                             </div>
